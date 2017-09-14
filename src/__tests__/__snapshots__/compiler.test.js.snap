@@ -1,0 +1,231 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compiler should compile complex schemas 1`] = `
+"/**
+ * @flow
+ */
+import {
+  Model,
+  ModelInstance,
+  model,
+  relation,
+  hasMany,
+  hasOne,
+} from \\"neo4-js\\";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from \\"neo4-js\\";
+
+/*::
+export type UserProps = {|
+  name: string,
+  age: number,
+  activated: boolean,
+|}
+*/
+
+class UserModel extends Model /*:: <UserProps, UserInstance>*/ {
+}
+export const User /*: UserModel*/ = new UserModel(\\"User\\");
+@model(User)
+export class UserInstance extends ModelInstance /*:: <UserProps>*/ {
+}
+/*::
+export type TaskProps = {|
+  title: string,
+  done: boolean,
+|}
+*/
+
+class TaskModel extends Model /*:: <TaskProps, TaskInstance>*/ {
+}
+export const Task /*: TaskModel*/ = new TaskModel(\\"Task\\");
+@model(Task)
+export class TaskInstance extends ModelInstance /*:: <TaskProps>*/ {
+}
+"
+`;
+
+exports[`compiler should compile schema with recursive relation 1`] = `
+"/**
+ * @flow
+ */
+import {
+  Model,
+  ModelInstance,
+  model,
+  relation,
+  hasMany,
+  hasOne,
+} from \\"neo4-js\\";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from \\"neo4-js\\";
+
+const ParentRelation = relation
+  .from(() => User)
+  .to(() => User)
+  .via(\\"parent\\");
+
+/*::
+export type UserProps = {|
+  name: string,
+  age: number,
+  activated: boolean,
+|}
+*/
+
+class UserModel extends Model /*:: <UserProps, UserInstance>*/ {
+}
+export const User /*: UserModel*/ = new UserModel(\\"User\\");
+@model(User)
+export class UserInstance extends ModelInstance /*:: <UserProps>*/ {
+  @hasOne(() => User, ParentRelation, \\"out\\")
+  // prettier-ignore
+  parent /*: HasOneActions<UserProps, UserInstance> */;
+  @hasMany(() => User, ParentRelation, \\"in\\")
+  // prettier-ignore
+  children /*: HasManyActions<UserProps, UserInstance> */;
+}
+"
+`;
+
+exports[`compiler should compile schema with simple relation 1`] = `
+"/**
+ * @flow
+ */
+import {
+  Model,
+  ModelInstance,
+  model,
+  relation,
+  hasMany,
+  hasOne,
+} from \\"neo4-js\\";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from \\"neo4-js\\";
+
+const TaskCreatorRelation = relation
+  .from(() => User)
+  .to(() => Task)
+  .via(\\"created\\");
+
+/*::
+export type UserProps = {|
+  name: string,
+  age: number,
+  activated: boolean,
+|}
+*/
+
+class UserModel extends Model /*:: <UserProps, UserInstance>*/ {
+}
+export const User /*: UserModel*/ = new UserModel(\\"User\\");
+@model(User)
+export class UserInstance extends ModelInstance /*:: <UserProps>*/ {
+  @hasMany(() => Task, TaskCreatorRelation)
+  // prettier-ignore
+  createdTasks /*: HasManyActions<TaskProps, TaskInstance> */;
+}
+/*::
+export type TaskProps = {|
+  title: string,
+  done: boolean,
+|}
+*/
+
+class TaskModel extends Model /*:: <TaskProps, TaskInstance>*/ {
+}
+export const Task /*: TaskModel*/ = new TaskModel(\\"Task\\");
+@model(Task)
+export class TaskInstance extends ModelInstance /*:: <TaskProps>*/ {
+  @hasOne(() => User, TaskCreatorRelation)
+  // prettier-ignore
+  creator /*: HasOneActions<UserProps, UserInstance> */;
+}
+"
+`;
+
+exports[`compiler should compile simplest possible schema 1`] = `
+"/**
+ * @flow
+ */
+import {
+  Model,
+  ModelInstance,
+  model,
+  relation,
+  hasMany,
+  hasOne,
+} from \\"neo4-js\\";
+import type {
+  StringProperty,
+  NumberProperty,
+  HasManyActions,
+  HasOneActions,
+} from \\"neo4-js\\";
+
+/*::
+export type UserProps = {|
+  name: string,
+|}
+*/
+
+class UserModel extends Model /*:: <UserProps, UserInstance>*/ {
+}
+export const User /*: UserModel*/ = new UserModel(\\"User\\");
+@model(User)
+export class UserInstance extends ModelInstance /*:: <UserProps>*/ {
+}
+"
+`;
+
+exports[`compiler should throw an error if a relation is used in a model which is not equal to from/to model names from relation 1`] = `
+[Error: Relation UserTasksRelation can't be used within Comment model because it's neither used as from or to model
+
+relation UserTasksRelation from User to Task via "created" {]
+`;
+
+exports[`compiler should throw an error if default value doesn't match type 1`] = `
+[Error: Default value doesn't match type of property.
+
+User.name is of type String and your default value 1 is of type Number.]
+`;
+
+exports[`compiler should throw an error if model names are not unique 1`] = `[Error: Model names must be unqiue. User is defined multiple times]`;
+
+exports[`compiler should throw an error if relation is not defined but used 1`] = `[Error: Relation UserCreatedTasks on User.createdTasks not defined]`;
+
+exports[`compiler should throw an error if wrong destination model is used within a property definition 1`] = `
+[Error: Task.creator needs to point either to User or Task as defined in
+
+relation UserTasksRelation from User to Task via "created" {
+
+Change
+creator: has one Comment using UserTasksRelation
+either to
+creator: has one User using UserTasksRelation
+or
+creator: has one Task using UserTasksRelation]
+`;
+
+exports[`compiler should throw an error if wrong destination model is used within a property definition in a recursive relation 1`] = `
+[Error: User.tasks needs to point to User as defined in
+
+relation UserUserRelation from User to User via "created" {
+
+Change
+tasks: has many Task using UserUserRelation
+to
+tasks: has many User using UserUserRelation]
+`;

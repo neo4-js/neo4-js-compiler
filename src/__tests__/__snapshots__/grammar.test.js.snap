@@ -1,0 +1,340 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`parser should parse complex model 1`] = `
+Array [
+  Object {
+    "name": "Node",
+    "properties": Array [
+      Object {
+        "name": "id",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "implements": "Node",
+    "name": "User",
+    "properties": Array [
+      Object {
+        "name": "name",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+      Object {
+        "direction": null,
+        "many": true,
+        "name": "tasks",
+        "relation": "UserCreatedTasks",
+        "to": "Task",
+        "type": "Relation",
+      },
+      Object {
+        "direction": null,
+        "many": true,
+        "name": "assignedTasks",
+        "relation": "UserAssignedTasks",
+        "to": "Task",
+        "type": "Relation",
+      },
+      Object {
+        "defaultValue": null,
+        "name": "age",
+        "scalar": true,
+        "type": "Number",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "name": "Task",
+    "properties": Array [
+      Object {
+        "name": "name",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+      Object {
+        "direction": null,
+        "many": false,
+        "name": "creator",
+        "relation": "UserCreatedTasks",
+        "to": "User",
+        "type": "Relation",
+      },
+      Object {
+        "direction": null,
+        "many": false,
+        "name": "assignee",
+        "relation": "UserAssignedTasks",
+        "to": "User",
+        "type": "Relation",
+      },
+      Object {
+        "defaultValue": null,
+        "name": "done",
+        "scalar": true,
+        "type": "Boolean",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "from": "User",
+    "name": "UserCreatedTasks",
+    "properties": Array [],
+    "to": "Task",
+    "type": "Relation",
+    "via": "created",
+  },
+  Object {
+    "from": "User",
+    "name": "UserAssignedTasks",
+    "properties": Array [
+      Object {
+        "name": "assignedDate",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+    ],
+    "to": "Task",
+    "type": "Relation",
+    "via": "assigned",
+  },
+]
+`;
+
+exports[`parser should parse default values 1`] = `
+Array [
+  Object {
+    "name": "User",
+    "properties": Array [
+      Object {
+        "defaultValue": Object {
+          "type": "String",
+          "value": "test",
+        },
+        "name": "name",
+        "scalar": true,
+        "type": "String",
+      },
+      Object {
+        "defaultValue": Object {
+          "type": "Number",
+          "value": 30000,
+        },
+        "name": "meh",
+        "scalar": true,
+        "type": "Number",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "name": "Task",
+    "properties": Array [
+      Object {
+        "name": "name",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+      Object {
+        "defaultValue": Object {
+          "type": "Boolean",
+          "value": "false",
+        },
+        "name": "done",
+        "scalar": true,
+        "type": "Boolean",
+      },
+      Object {
+        "defaultValue": Object {
+          "type": "Number",
+          "value": 394,
+        },
+        "name": "order",
+        "scalar": true,
+        "type": "Number",
+      },
+    ],
+    "type": "Model",
+  },
+]
+`;
+
+exports[`parser should parse implements 1`] = `
+Array [
+  Object {
+    "name": "Node",
+    "properties": Array [
+      Object {
+        "name": "id",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "implements": "Node",
+    "name": "User",
+    "properties": Array [
+      Object {
+        "name": "name",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "implements": "Node",
+    "name": "Task",
+    "properties": Array [
+      Object {
+        "name": "title",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+    ],
+    "type": "Model",
+  },
+]
+`;
+
+exports[`parser should parse model without properties 1`] = `
+Array [
+  Object {
+    "name": "User",
+    "properties": Array [],
+    "type": "Model",
+  },
+]
+`;
+
+exports[`parser should parse schema with simple relation 1`] = `
+Array [
+  Object {
+    "name": "User",
+    "properties": Array [
+      Object {
+        "name": "name",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+      Object {
+        "direction": null,
+        "many": true,
+        "name": "tasks",
+        "relation": "UserTaskRelation",
+        "to": "Task",
+        "type": "Relation",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "name": "Task",
+    "properties": Array [
+      Object {
+        "name": "title",
+        "required": true,
+        "scalar": true,
+        "type": "String",
+      },
+      Object {
+        "direction": null,
+        "many": false,
+        "name": "creator",
+        "relation": "UserTaskRelation",
+        "to": "User",
+        "type": "Relation",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "from": "User",
+    "name": "UserTaskRelation",
+    "properties": Array [
+      Object {
+        "defaultValue": null,
+        "name": "order",
+        "scalar": true,
+        "type": "Number",
+      },
+    ],
+    "to": "Task",
+    "type": "Relation",
+    "via": "created",
+  },
+]
+`;
+
+exports[`parser should parse schema with two models 1`] = `
+Array [
+  Object {
+    "name": "User",
+    "properties": Array [
+      Object {
+        "defaultValue": null,
+        "name": "name",
+        "scalar": true,
+        "type": "String",
+      },
+    ],
+    "type": "Model",
+  },
+  Object {
+    "name": "Task",
+    "properties": Array [
+      Object {
+        "defaultValue": null,
+        "name": "title",
+        "scalar": true,
+        "type": "String",
+      },
+      Object {
+        "defaultValue": null,
+        "name": "priority",
+        "scalar": true,
+        "type": "Number",
+      },
+      Object {
+        "defaultValue": null,
+        "name": "done",
+        "scalar": true,
+        "type": "Boolean",
+      },
+    ],
+    "type": "Model",
+  },
+]
+`;
+
+exports[`parser should parse simplest possible model 1`] = `
+Array [
+  Object {
+    "name": "User",
+    "properties": Array [
+      Object {
+        "defaultValue": null,
+        "name": "name",
+        "scalar": true,
+        "type": "String",
+      },
+    ],
+    "type": "Model",
+  },
+]
+`;
