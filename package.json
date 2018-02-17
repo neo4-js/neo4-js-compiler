@@ -9,6 +9,7 @@
     "build:lib": "babel -d lib src --ignore '**/__tests__/**'",
     "build:flow": "flow-copy-source -v -i '**/__tests__/**' src lib",
     "prettier": "prettier --trailing-comma es5 --write 'src/**/*.js'",
+    "railroad": "nearley-railroad src/grammar.ne -o grammar.html",
     "test": "jest",
     "test:watch": "yarn test -- --watch",
     "compile": "node scripts/nearley-compiler.js"
